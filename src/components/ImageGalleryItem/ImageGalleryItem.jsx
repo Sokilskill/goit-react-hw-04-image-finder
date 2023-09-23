@@ -7,7 +7,7 @@ const ImageGalleryItem = ({
   imagePreview: { webformatURL, largeImageURL, tags },
 }) => {
   const [showModal, setShowModal] = useState(false);
-  console.log('show', showModal);
+
   const onToggleModal = () => {
     setShowModal(state => !state);
   };
