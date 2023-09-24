@@ -7,7 +7,6 @@ import NewsApiService from 'api/pixabayAPI';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import Button from '../Button/Button';
 import css from './ImageGallery.module.css';
-import SearchBar from 'components/SearchBar/SearchBar';
 
 const newsApiService = new NewsApiService();
 const perPage = newsApiService.perPage;
