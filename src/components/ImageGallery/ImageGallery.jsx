@@ -7,6 +7,7 @@ import NewsApiService from 'api/pixabayAPI';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import Button from '../Button/Button';
 import css from './ImageGallery.module.css';
+import SearchBar from 'components/SearchBar/SearchBar';
 
 const newsApiService = new NewsApiService();
 const perPage = newsApiService.perPage;
@@ -74,11 +75,17 @@ const ImageGallery = ({ searchQuery }) => {
   return (
     <div className="container">
       {status === 'resolve' && (
-        <ul className={css.imageGallery}>
-          {dataQuery.map(data => (
-            <ImageGalleryItem key={data.id} imagePreview={data} />
-          ))}
-        </ul>
+        <>
+          <p>
+            Search on the site
+            <b style={{ fontWeight: 'bold' }}>"{searchQuery}"</b>
+          </p>
+          <ul className={css.imageGallery}>
+            {dataQuery.map(data => (
+              <ImageGalleryItem key={data.id} imagePreview={data} />
+            ))}
+          </ul>
+        </>
       )}
       {status === 'pending' && <Loader />}
       {totalPage !== currentPage && <Button fetchLoadMore={fetchLoadMore} />}
