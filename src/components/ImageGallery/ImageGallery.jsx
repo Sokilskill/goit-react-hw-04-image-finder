@@ -15,7 +15,8 @@ const ImageGallery = ({ searchQuery }) => {
   const [dataQuery, setDataQuery] = useState(null);
   const [status, setStatus] = useState('idle');
   // const [showBtnMore, setShowBtnMore] = useState(false);
-  const [totalHits, setTotalHits] = useState(0);
+  const [totalHits, setTotalHits] = useState(1);
+
   const totalPage = Math.ceil(totalHits / perPage);
   const currentPage = newsApiService.page;
 
