@@ -87,7 +87,9 @@ const ImageGallery = ({ searchQuery }) => {
         </>
       )}
       {status === 'pending' && <Loader />}
-      {totalPage !== currentPage && <Button fetchLoadMore={fetchLoadMore} />}
+      {totalPage !== currentPage && (
+        <Button fetchLoadMore={fetchLoadMore} children="Load More" />
+      )}
     </div>
   );
 };
