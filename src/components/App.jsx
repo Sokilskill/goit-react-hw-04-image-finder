@@ -4,6 +4,7 @@ import SearchBar from './SearchBar/SearchBar';
 import ImageGallery from './ImageGallery/ImageGallery';
 
 import 'react-toastify/dist/ReactToastify.min.css';
+import ScrollToTopButton from './ScrollToTopButton/ScrollToTopButton';
 
 export const App = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -17,6 +18,7 @@ export const App = () => {
       <SearchBar onSubmit={handlerFormSubmit} />
 
       <ImageGallery searchQuery={searchQuery} />
+      <ScrollToTopButton />
       <ToastContainer />
     </>
   );
