@@ -3,77 +3,86 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
 import Loader from '../Loader/Loader';
-import NewsApiService from 'api/pixabayAPI';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import Button from '../Button/Button';
 import css from './ImageGallery.module.css';
+import { fetchSearch } from 'api/pixabayAPI';
 
-const newsApiService = new NewsApiService();
-const perPage = newsApiService.perPage;
+const Status = {
+  IDLE: 'idle',
+  PENDING: 'pending',
+  RESOLVED: 'resolved',
+  REJECTED: 'rejected',
+};
 
 const ImageGallery = ({ searchQuery }) => {
-  const [dataQuery, setDataQuery] = useState(null);
-  const [status, setStatus] = useState('idle');
-  // const [showBtnMore, setShowBtnMore] = useState(false);
-  const [totalHits, setTotalHits] = useState(1);
-
-  const totalPage = Math.ceil(totalHits / perPage);
-  const currentPage = newsApiService.page;
+  const [dataQuery, setDataQuery] = useState([]);
+  const [status, setStatus] = useState(Status.IDLE);
+  const [totalHits, setTotalHits] = useState(0);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    if (searchQuery === '') {
-      return;
-    }
-    const fetchData = async () => {
-      newsApiService.query = searchQuery;
-      newsApiService.resetPageToDefault();
-      setStatus('pending');
-      // setShowBtnMore(false);
+    if (!searchQuery) return;
+    setStatus(Status.PENDING);
+
+    const fetch = async () => {
       try {
-        const data = await newsApiService.fetchSearch();
+        const data = await fetchSearch({
+          query: searchQuery,
+          currentPage: 1,
+        });
+
         if (parseInt(data.totalHits) === 0) {
           throw new Error(
             'Sorry, there are no images matching your search query. Please try again.'
           );
         }
+
         setTotalHits(data.total);
         setDataQuery(data.hits);
-        setStatus('resolve');
+        setPage(1);
+        setStatus(Status.RESOLVED);
         toast(`Hooray! We found ${data.totalHits} images.`);
-        // if (data.totalHits > perPage) setShowBtnMore(true);
       } catch (error) {
         toast.error(`${error}`);
         console.log(error);
-        setStatus('rejected');
+        setStatus(Status.REJECTED);
       }
     };
 
-    fetchData();
+    fetch();
   }, [searchQuery]);
 
-  const fetchLoadMore = async () => {
-    newsApiService.incrementPage();
-    const data = await newsApiService.fetchSearch();
-    setStatus('pending');
-    try {
-      console.log('data', data);
+  useEffect(() => {
+    if (page === 1) return;
 
-      // if (updatedScore >= data.totalHits) {
-      //   setShowBtnMore(false);
-      //   toast("We're sorry, but you've reached the end of search results.");
-      //   return;
-      // }
-      setDataQuery(prevState => [...prevState, ...data.hits]);
-      setStatus('resolve');
-    } catch (error) {
-      toast.error(`${error}`);
-      console.log(error);
-    }
+    const fetchMoreData = async () => {
+      setStatus(Status.PENDING);
+
+      try {
+        const data = await fetchSearch({
+          query: searchQuery,
+          currentPage: page,
+        });
+
+        setDataQuery(prevState => [...prevState, ...data.hits]);
+        setStatus(Status.RESOLVED);
+      } catch (error) {
+        setStatus(Status.REJECTED);
+        toast.error(`${error.message}`);
+      }
+    };
+
+    fetchMoreData();
+  }, [page, searchQuery]);
+
+  const fetchLoadMore = async () => {
+    setPage(prevState => prevState + 1);
   };
 
   return (
     <div className="container">
-      {status === 'resolve' && (
+      {dataQuery.length !== 0 && (
         <>
           <p>
             Search on the site
@@ -86,8 +95,9 @@ const ImageGallery = ({ searchQuery }) => {
           </ul>
         </>
       )}
-      {status === 'pending' && <Loader />}
-      {totalPage !== currentPage && (
+      {status === Status.PENDING && <Loader />}
+
+      {totalHits !== dataQuery.length && (
         <Button fetchLoadMore={fetchLoadMore} children="Load More" />
       )}
     </div>

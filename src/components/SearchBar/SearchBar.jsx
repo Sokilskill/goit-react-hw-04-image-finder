@@ -7,24 +7,24 @@ import css from './SearchBar.module.css';
 const SearchBar = ({ onSubmit }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handlerFormSubmit = e => {
+  const handleFormSubmit = e => {
     e.preventDefault();
 
     if (searchQuery.trim() === '') {
       toast.error('Enter something to search.');
       return;
     }
-    onSubmit(searchQuery.toLowerCase());
+    onSubmit(searchQuery.trim().toLowerCase());
     setSearchQuery('');
   };
 
-  const handlerInputChange = e => {
+  const handleInputChange = e => {
     setSearchQuery(e.currentTarget.value);
   };
 
   return (
     <header className={css.searchbar}>
-      <form className={css.searchForm} onSubmit={handlerFormSubmit}>
+      <form className={css.searchForm} onSubmit={handleFormSubmit}>
         <button
           type="submit"
           className={css['searchForm-button']}
@@ -34,7 +34,7 @@ const SearchBar = ({ onSubmit }) => {
         </button>
 
         <input
-          onChange={handlerInputChange}
+          onChange={handleInputChange}
           className={css['searchForm-input']}
           type="text"
           autoComplete="off"

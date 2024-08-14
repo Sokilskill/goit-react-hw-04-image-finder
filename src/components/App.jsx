@@ -9,13 +9,9 @@ import ScrollToTopButton from './ScrollToTopButton/ScrollToTopButton';
 export const App = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handlerFormSubmit = searchQuery => {
-    setSearchQuery(searchQuery);
-  };
-
   return (
     <>
-      <SearchBar onSubmit={handlerFormSubmit} />
+      <SearchBar onSubmit={setSearchQuery} />
 
       <ImageGallery searchQuery={searchQuery} />
       <ScrollToTopButton />
