@@ -7,6 +7,7 @@ import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import Button from '../Button/Button';
 import css from './ImageGallery.module.css';
 import { fetchSearch } from 'api/pixabayAPI';
+import { scrollToTop } from 'utils';
 
 const Status = {
   IDLE: 'idle',
@@ -23,13 +24,14 @@ const ImageGallery = ({ searchQuery }) => {
 
   useEffect(() => {
     if (!searchQuery) return;
+
+    setPage(1);
     setStatus(Status.PENDING);
 
     const fetch = async () => {
       try {
         const data = await fetchSearch({
           query: searchQuery,
-          currentPage: 1,
         });
 
         if (parseInt(data.totalHits) === 0) {
@@ -40,9 +42,10 @@ const ImageGallery = ({ searchQuery }) => {
 
         setTotalHits(data.total);
         setDataQuery(data.hits);
-        setPage(1);
         setStatus(Status.RESOLVED);
+
         toast(`Hooray! We found ${data.totalHits} images.`);
+        scrollToTop();
       } catch (error) {
         toast.error(`${error}`);
         console.log(error);
@@ -54,7 +57,7 @@ const ImageGallery = ({ searchQuery }) => {
   }, [searchQuery]);
 
   useEffect(() => {
-    if (page === 1) return;
+    if (page === 1 || status === Status.PENDING) return;
 
     const fetchMoreData = async () => {
       setStatus(Status.PENDING);
@@ -66,6 +69,7 @@ const ImageGallery = ({ searchQuery }) => {
         });
 
         setDataQuery(prevState => [...prevState, ...data.hits]);
+
         setStatus(Status.RESOLVED);
       } catch (error) {
         setStatus(Status.REJECTED);
@@ -74,7 +78,8 @@ const ImageGallery = ({ searchQuery }) => {
     };
 
     fetchMoreData();
-  }, [page, searchQuery]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   const fetchLoadMore = async () => {
     setPage(prevState => prevState + 1);
@@ -98,7 +103,7 @@ const ImageGallery = ({ searchQuery }) => {
       {status === Status.PENDING && <Loader />}
 
       {totalHits !== dataQuery.length && (
-        <Button fetchLoadMore={fetchLoadMore} children="Load More" />
+        <Button onClick={fetchLoadMore}>Load More</Button>
       )}
     </div>
   );

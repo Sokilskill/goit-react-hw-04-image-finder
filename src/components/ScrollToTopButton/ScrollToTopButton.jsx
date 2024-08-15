@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { scrollToTop } from 'utils';
 
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -18,16 +19,9 @@ const ScrollToTopButton = () => {
     };
   }, []);
 
-  const handleScrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  };
-
   return (
     <button
-      onClick={handleScrollToTop}
+      onClick={scrollToTop}
       style={{
         display: 'block',
         position: 'fixed',
