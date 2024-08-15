@@ -2,20 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import css from './Button.module.css';
 
-function Button({ fetchLoadMore, children }) {
+function Button({ onClick, children }) {
   return (
-    <button
-      className={css.button}
-      onClick={fetchLoadMore}
-      aria-label={children}
-    >
+    <button className={css.button} onClick={onClick} aria-label={children}>
       {children}
     </button>
   );
 }
 
 Button.propTypes = {
-  fetchLoadMore: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
+  children: PropTypes.node,
 };
 
 export default Button;
