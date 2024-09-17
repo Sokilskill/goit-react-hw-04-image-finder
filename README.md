@@ -1,6 +1,6 @@
 # Pixabay API Search
 
-![Project Image](./assets/first-page-img.png)
+![Project Image](./public/first-page-img.png)
 
 > Цей проект реалізує простий веб-додаток, який дозволяє користувачам шукати
 > зображення за допомогою Pixabay API.

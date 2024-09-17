@@ -1,15 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import gsap from 'gsap';
-import Modal from '../Modal/Modal';
-import css from './ImageGalleryItem.module.css';
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import Modal from "../Modal/Modal";
+import css from "./ImageGalleryItem.module.css";
 
-const ImageGalleryItem = ({
+interface ImagePreview {
+  webformatURL: string;
+  largeImageURL: string;
+  tags: string;
+}
+
+interface ImageGalleryItemProps {
+  imagePreview: ImagePreview;
+}
+
+const ImageGalleryItem: React.FC<ImageGalleryItemProps> = ({
   imagePreview: { webformatURL, largeImageURL, tags },
 }) => {
-  const itemRef = useRef(null);
+  const itemRef = useRef<HTMLElement>(null);
 
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   useEffect(() => {
     const randomX = Math.random() * 300 - 100;
@@ -17,12 +26,12 @@ const ImageGalleryItem = ({
     gsap.fromTo(
       itemRef.current,
       { opacity: 0, x: randomX, y: randomY },
-      { opacity: 1, x: 0, y: 0, duration: 3, ease: 'power2.out' }
+      { opacity: 1, x: 0, y: 0, duration: 3, ease: "power2.out" }
     );
   }, []);
 
   const onToggleModal = () => {
-    setShowModal(state => !state);
+    setShowModal((state) => !state);
   };
 
   return (
@@ -35,7 +44,7 @@ const ImageGalleryItem = ({
         <img
           src={webformatURL}
           alt={tags}
-          className={css['imageGalleryItem-image']}
+          className={css["imageGalleryItem-image"]}
           loading="lazy"
         />
       </li>
@@ -44,10 +53,6 @@ const ImageGalleryItem = ({
       )}
     </>
   );
-};
-
-ImageGalleryItem.propTypes = {
-  imagePreview: PropTypes.object.isRequired,
 };
 
 export default ImageGalleryItem;

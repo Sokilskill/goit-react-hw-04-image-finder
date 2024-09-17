@@ -1,6 +1,6 @@
 # Pixabay API Search
 
-![Project Image](./assets/first-page-img.png)
+![Project Image](./public/first-page-img.png)
 
 > This project implements a simple web application that allows users to search
 > for images using the Pixabay API.
