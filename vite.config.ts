@@ -13,5 +13,5 @@ export default defineConfig({
   server: {
     historyApiFallback: true,
   },
-  base: '/drive-rentals/',
+  base: '/image-finder/',
 });
