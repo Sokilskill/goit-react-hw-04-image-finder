@@ -31,7 +31,7 @@ const Modal: React.FC<ModalProps> = ({ img, tag, onToggle }) => {
     };
   }, [onKeyDown]);
 
-  const onClickBackDrop = (e) => {
+  const onClickBackDrop = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
       onToggle();
     }

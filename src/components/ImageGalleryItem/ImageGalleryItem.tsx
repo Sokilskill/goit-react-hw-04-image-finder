@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, RefObject } from "react";
 import gsap from "gsap";
 import Modal from "../Modal/Modal";
 import css from "./ImageGalleryItem.module.css";
@@ -16,8 +16,7 @@ interface ImageGalleryItemProps {
 const ImageGalleryItem: React.FC<ImageGalleryItemProps> = ({
   imagePreview: { webformatURL, largeImageURL, tags },
 }) => {
-  const itemRef = useRef<HTMLElement>(null);
-
+  const itemRef: RefObject<HTMLLIElement> = useRef<HTMLLIElement>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
 
   useEffect(() => {
