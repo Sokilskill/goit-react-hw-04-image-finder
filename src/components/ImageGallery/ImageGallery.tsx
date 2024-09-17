@@ -56,9 +56,13 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ searchQuery }) => {
 
         toast.success(`Hooray! We found ${data.totalHits} images.`);
         scrollToTop();
-      } catch (error: any) {
-        toast.error(error.message);
-        console.error(error);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          toast.error(error.message);
+          console.error(error);
+        } else {
+          console.error("Unexpected error", error);
+        }
         setStatus(Status.REJECTED);
       }
     };
@@ -78,8 +82,13 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ searchQuery }) => {
 
         setDataQuery((prevState) => [...prevState, ...data.hits]);
         setStatus(Status.RESOLVED);
-      } catch (error: any | unknown) {
-        toast.error(error.message);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          toast.error(error.message);
+          console.error(error);
+        } else {
+          console.error("Unexpected error", error);
+        }
         setStatus(Status.REJECTED);
       }
     };
